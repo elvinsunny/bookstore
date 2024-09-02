@@ -1,0 +1,486 @@
+<!--   {% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Online Bookstore</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <style>
+    /* Custom Navbar Styles */
+    .navbar {
+      background-color: #333; /* Dark background color */
+      border: none; /* No border */
+      padding: 15px 0; /* Increase the padding to increase the height */
+      line-height: 50px; /* Increase the line height to center text vertically */
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+      color: #fff; /* Text color */
+    }
+
+    .navbar-inverse .navbar-nav > li > a:hover,
+    .navbar-inverse .navbar-nav > li > a:focus {
+      color: #ff9900; /* Text color on hover/focus */
+    }
+
+    .navbar-form .form-control {
+      background-color: #555; /* Search input background color */
+      color: #fff; /* Search input text color */
+    }
+
+    .navbar-form .form-control::placeholder {
+      color: #ccc; /* Search input placeholder text color */
+    }
+
+    .navbar-form .btn-default {
+      background-color: #ff9900; /* Search button background color */
+      color: #333; /* Search button text color */
+    }
+
+    .navbar-form .btn-default:hover {
+      background-color: #ffcc00; /* Search button background color on hover */
+    }
+
+    /* Rest of your custom styles */
+
+    /* Make the navbar collapse sooner on smaller screens */
+    @media screen and (max-width: 992px) {
+      .navbar-collapse {
+        max-height: none; /* Remove the max-height to show the menu items directly */
+      }
+    }
+
+{% comment %} 
+add to cart button {% endcomment %}
+    /* Style for the form container */
+    .add-to-cart-form {
+        display: inline-block;
+        margin-right: 10px; /* Adjust the margin as needed */
+    }
+
+    /* Style for the submit button */
+    .add-to-cart-button {
+        background-color: #4caf50; /* Green background color */
+        color: white; /* White text color */
+        border: none; /* Remove border */
+        padding: 10px 15px; /* Add padding */
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 5px; /* Optional: Add border radius for rounded corners */
+    }
+
+    /* Optional: Style for the link if needed */
+    .add-to-cart-link {
+        text-decoration: none; /* Remove underline */
+        color: #4caf50; /* Green text color */
+    }
+
+
+
+
+{% comment %} category section {% endcomment %}
+
+    @media screen and (max-width: 992px) {
+      .navbar-collapse {
+        max-height: none;
+      }
+    }
+
+    /* Styles for Category Cards */
+    .category-cards {
+      margin-top: 20px;
+    }
+
+    .category-cards .thumbnail {
+      height: 300px;
+    }
+
+    .category-cards img {
+      height: 200px;
+    }
+
+
+
+
+
+
+
+    
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="{% url 'view' %}">Admin</a></li>
+        <li><a href="{% url 'cart'%}">Cart</a></li>
+        <li><a href="{% url 'register'%}">About Us</a></li>
+      </ul>
+      <form class="navbar-form navbar-left search-bar">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+
+
+
+ {% if user.is_authenticated %}
+ <ul class="nav navbar-nav navbar-right">
+   <li><a href="{% url 'logout' %}">Logout</a></li>
+ </ul>
+{% else %}
+ <ul class="nav navbar-nav navbar-right">
+   <li><a href="{% url 'login'%}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+   <li><a href="{% url 'register'%}">Register</a></li>
+ </ul>
+{% endif %}
+</div>
+</div>
+</nav>
+
+
+
+
+ <div class="container-fluid category-cards">
+  <div class="row">
+    {% for category in categories %}
+      <div class="col-md-4">
+        <div class="thumbnail">
+          
+          <img src="{{ category.image.url }}" alt="{{ category.name }}" class="img-responsive">
+          <div class="caption">
+            <h3>{{ category.name }}</h3>
+            <p>{{ category.description }}</p>
+            <p><a href="{% url 'category_detail' category.id %}" class="btn btn-primary" role="button">Explore</a></p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div> 
+
+
+
+
+
+
+<div class="container" style="margin-top: 20px;">
+  <div class="row d-flex">
+    {% for item in products %}
+      <div class="col-md-4">
+        <div class="thumbnail">
+          <a href="{% url 'product_detail' item.id %}"> <img src="{{ item.image.url }}" alt="{{ item.name }}" class="img-responsive"></a>
+          <div class="caption">
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.description }}</p>
+            <p>ISBN: {{ item.isbn }}</p>
+            <p>Binding: {{ item.binding }}</p>
+            <p>Language: {{ item.language }}</p>
+            <p>Publishing Date: {{ item.publishing_date }}</p>
+            <p>Edition: {{ item.edition }}</p>
+            {% comment %} <p>stock: {{ item.quantity }}</p> {% endcomment %}
+
+            {% if item.quantity == 0 %}
+            <p class="out-of-stock">Out of Stock</p>
+        {% else %}
+            <p>Stock: {{ item.quantity }}</p>
+
+            <p><strong>Price: ₹{{ item.price }}</strong></p>
+            <p>Product ID: {{ item.id }}</p>
+
+
+              <div class="add-to-cart-form">
+                <form method="post" action="{% url 'add_to_cart' item.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Add to Cart" class="add-to-cart-button">
+                </form>
+            </div>
+          
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+</body>
+</html>    -->
+
+
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Online Bookstore</title> 
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  
+  <style>
+
+
+    .product-cards .card {
+      height: 100%;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      transition: box-shadow 0.3s ease-in-out;
+      overflow: hidden; /* Ensure content doesn't overflow */
+    }
+    
+    .product-cards .card:hover {
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .product-cards .card img {
+      width: 100%; /* Ensure the image takes 100% of the container width */
+      height: auto;
+      border-bottom: 1px solid #ddd; /* Add a border between image and content */
+    }
+    
+    .product-cards .card-body {
+      padding: 15px;
+    }
+    
+    .product-cards .card-title {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    
+    .product-cards .card-text {
+      color: #555;
+      font-size: 0.9em;
+      margin-bottom: 15px;
+    }
+    
+    .product-cards .add-to-cart-form {
+      text-align: center;
+    }
+    
+    
+    @media (max-width: 768px) {
+      .product-cards .col-md-4 {
+        margin-bottom: 20px;
+      }
+    }
+    
+
+    /* Add your custom styles here */
+ 
+    /* Custom Navbar Styles */
+    .navbar {
+      background-color: #333;
+      padding: 15px 0;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+      color: #fff;
+    }
+
+    .navbar-inverse .navbar-nav > li > a:hover,
+    .navbar-inverse .navbar-nav > li > a:focus {
+      color: #ff9900;
+    }
+
+    .navbar-form .form-control {
+      background-color: #555;
+      color: #fff;
+    }
+
+    .navbar-form .form-control::placeholder {
+      color: #ccc;
+    }
+
+    .navbar-form .btn-default {
+      background-color: #ff9900;
+      color: #333;
+    }
+
+    .navbar-form .btn-default:hover {
+      background-color: #ffcc00;
+    }
+
+    /* Rest of your custom styles */
+
+    /* Make the navbar collapse sooner on smaller screens */
+    @media screen and (max-width: 992px) {
+      .navbar-collapse {
+        max-height: none;
+      }
+    }
+
+    /* Styles for Category and Product Cards */
+    .category-cards .card,
+    .product-cards .card {
+      height: 100%; /* Set a fixed height for the cards */
+    }
+
+    .category-cards .col-md-4,
+    .product-cards .col-md-4 {
+      margin-bottom: 20px; /* Set margin for spacing between columns */
+    }
+
+    /* Style for Add to Cart Button */
+    .add-to-cart-form {
+      display: inline-block;
+      margin-top: auto; /* Push the button to the bottom */
+    }
+
+    .add-to-cart-button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .product-cards .card-body p {
+      margin-bottom: 0.29em; /* Adjust the margin as needed to decrease the space between lines */
+    }
+
+    .out-of-stock {
+      color: #dc3545; /* Red text color */
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page-container" style="background-color: #333;">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Online Bookstore</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+        {% comment %} <li class="nav-item"><a class="nav-link" href="{% url 'view' %}">Admin</a></li> {% endcomment %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'cart'%}">Cart</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'user_orders'%}">Your Orders</a></li>
+      </ul>
+
+
+
+ <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'home' %}">
+  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+  <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+</form> 
+
+
+{% if no_results %}
+  <p style="color: red; font-weight: bold;">No results found</p>
+{% endif %}
+
+
+
+
+
+
+      {% comment %} <form method="get" action="{% url 'search' %}">
+        <input type="text" name="q" placeholder="Search products">
+        <input type="submit" value="Search">
+    </form> {% endcomment %}
+
+
+      {% if user.is_authenticated %}
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+      {% else %}
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="{% url 'login'%}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'register'%}">Register</a></li>
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+{% comment %} <div class="container category-cards">
+  <div class="row">
+    {% for category in categories %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="{{ category.image.url }}" alt="{{ category.name }}" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">{{ category.name }}</h5>
+            <p class="card-text">{{ category.description }}</p>
+            <a href="{% url 'category_detail' category.id %}" class="btn btn-primary">Explore</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div> {% endcomment %}
+
+<div class="container product-cards" style="margin-top: 20px;">
+  <div class="row">
+    {% for item in products %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <a href="{% url 'product_detail' item.id %}"><img src="{{ item.image.url }}" alt="{{ item.name }}" class="card-img-top"></a>
+          <div class="card-body">
+            <h5 class="card-title">{{ item.name }}</h5>
+            <p>Language: {{ item.language }}</p>
+            <h5 class="card-title">Category: {{ item.category.name }}</h5>
+            <p>Edition: {{ item.edition }}</p>
+            {% if item.quantity == 0 %}
+              <p class="out-of-stock">Out of Stock</p>
+              <p class="out-of-stock"> Currently Unavailable</p>
+            {% else %}
+              <p>Stock: {{ item.quantity }}</p>
+              <p><strong>Price: ₹{{ item.price }}</strong></p>
+              <div class="add-to-cart-form">
+                <form method="post" action="{% url 'add_to_cart' item.id %}">
+                  {% csrf_token %}
+                  <input type="submit" value="Add to Cart" class="btn btn-success add-to-cart-button">
+                </form>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+</div>
+</body>
+</html>

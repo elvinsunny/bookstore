@@ -1,0 +1,241 @@
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Online Bookstore</title> 
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  
+  <style>
+
+
+    .product-cards .card {
+      height: 100%;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      transition: box-shadow 0.3s ease-in-out;
+      overflow: hidden; /* Ensure content doesn't overflow */
+    }
+    
+    .product-cards .card:hover {
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .product-cards .card img {
+      width: 100%; /* Ensure the image takes 100% of the container width */
+      height: auto;
+      border-bottom: 1px solid #ddd; /* Add a border between image and content */
+    }
+    
+    .product-cards .card-body {
+      padding: 15px;
+    }
+    
+    .product-cards .card-title {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    
+    .product-cards .card-text {
+      color: #555;
+      font-size: 0.9em;
+      margin-bottom: 15px;
+    }
+    
+    .product-cards .add-to-cart-form {
+      text-align: center;
+    }
+    
+    
+    @media (max-width: 768px) {
+      .product-cards .col-md-4 {
+        margin-bottom: 20px;
+      }
+    }
+    
+
+    /* Add your custom styles here */
+ 
+    /* Custom Navbar Styles */
+    .navbar {
+      background-color: #333;
+      padding: 15px 0;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+      color: #fff;
+    }
+
+    .navbar-inverse .navbar-nav > li > a:hover,
+    .navbar-inverse .navbar-nav > li > a:focus {
+      color: #ff9900;
+    }
+
+    .navbar-form .form-control {
+      background-color: #555;
+      color: #fff;
+    }
+
+    .navbar-form .form-control::placeholder {
+      color: #ccc;
+    }
+
+    .navbar-form .btn-default {
+      background-color: #ff9900;
+      color: #333;
+    }
+
+    .navbar-form .btn-default:hover {
+      background-color: #ffcc00;
+    }
+
+    /* Rest of your custom styles */
+
+    /* Make the navbar collapse sooner on smaller screens */
+    @media screen and (max-width: 992px) {
+      .navbar-collapse {
+        max-height: none;
+      }
+    }
+
+    /* Styles for Category and Product Cards */
+    .category-cards .card,
+    .product-cards .card {
+      height: 100%; /* Set a fixed height for the cards */
+    }
+
+    .category-cards .col-md-4,
+    .product-cards .col-md-4 {
+      margin-bottom: 20px; /* Set margin for spacing between columns */
+    }
+
+    /* Style for Add to Cart Button */
+    .add-to-cart-form {
+      display: inline-block;
+      margin-top: auto; /* Push the button to the bottom */
+    }
+
+    .add-to-cart-button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .product-cards .card-body p {
+      margin-bottom: 0.29em; /* Adjust the margin as needed to decrease the space between lines */
+    }
+
+    .out-of-stock {
+      color: #dc3545; /* Red text color */
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page-container" style="background-color: #333;">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Online Bookstore</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'view' %}">Admin</a></li>
+        {% comment %} <li class="nav-item"><a class="nav-link" href="{% url 'cart'%}">Cart</a></li> {% endcomment %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'users_with_orders'%}">Orders</a></li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      
+      {% if user.is_authenticated %}
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+      {% else %}
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="{% url 'login'%}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'register'%}">Register</a></li>
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+{% comment %} <div class="container category-cards">
+  <div class="row">
+    {% for category in categories %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="{{ category.image.url }}" alt="{{ category.name }}" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">{{ category.name }}</h5>
+            <p class="card-text">{{ category.description }}</p>
+            <a href="{% url 'category_detail' category.id %}" class="btn btn-primary">Explore</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div> {% endcomment %}
+
+<div class="container product-cards" style="margin-top: 20px;">
+  <div class="row">
+    {% for item in products %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          {% comment %} <img src="{{ item.image.url }}" alt="{{ item.name }}" class="card-img-top"> {% endcomment %}
+          <a href="{% url 'product_detail' item.id %}"> <img src="{{ item.image.url }}" alt="{{ item.name }}" class="card-img-top"></a>
+          <div class="card-body">
+            <h5 class="card-title">{{ item.name }}</h5>
+            {% comment %} <p class="card-text">{{ item.description }}</p> {% endcomment %}
+            {% comment %} <p>ISBN: {{ item.isbn }}</p> {% endcomment %}
+            {% comment %} <p>Binding: {{ item.binding }}</p> {% endcomment %}
+            <p>Language: {{ item.language }}</p>
+            {% comment %} <p>Publishing Date: {{ item.publishing_date }}</p> {% endcomment %}
+            <p>Edition: {{ item.edition }}</p>
+            {% if item.quantity == 0 %}
+              <p class="out-of-stock">Out of Stock</p>
+              <p class="out-of-stock"> Currently Unavailable</p>
+            {% else %}
+              <p>Stock: {{ item.quantity }}</p>
+              <p><strong>Price: ₹{{ item.price }}</strong></p>
+              <div class="add-to-cart-form">
+                <form method="post" action="{% url 'add_to_cart' item.id %}">
+                  {% csrf_token %}
+                  {% comment %} <input type="submit" value="Add to Cart" class="btn btn-success add-to-cart-button"> {% endcomment %}
+                </form>
+              </div>
+            {% endif %}
+            
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+</div>
+</body>
+</html>

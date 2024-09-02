@@ -1,0 +1,206 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Information</title>
+</head>
+<body>
+
+<h1>Billing Information</h1>
+
+<p>Order Number: {{ order.pk }}</p>
+<p>User: {{ order.user.username }}</p>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order.items.all %} 
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.subtotal }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>Total Quantity: {{ order.total_quantity }}</p>
+<p>Total Price: ${{ order.total_price }}</p>
+
+<p>Billing Address: {{ order.billing_address }}</p>
+<!-- Add other billing information here -->
+
+<!-- You can add a link to view orders or go back to the home page -->
+<p><a href="{% url 'home' %}">Continue Shopping</a></p>
+
+</body>
+</html> {% endcomment %}
+
+
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Information</title>
+</head>
+<body>
+
+<h1>Billing Information</h1>
+
+<p>Order Number: {{ order.pk }}</p>
+<p>User: {{ order.user.username }}</p>
+
+<table border="1">
+
+    <tbody>
+        {% for item in order.items.all %} 
+            <tr>
+                <td>
+                    <img src="{{ item.product.image.url }}" height="100" width="100" alt="{{ item.product.name }}">
+                    {{ item.product.name }}
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.subtotal }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>Total Quantity: {{ order.total_quantity }}</p>
+<p>Total Price: ${{ order.total_price }}</p>
+
+<p>Billing Address: {{ order.billing_address }}</p>
+<!-- Add other billing information here -->
+
+<!-- You can add a link to view orders or go back to the home page -->
+<p><a href="{% url 'home' %}">Continue Shopping</a></p>
+
+</body>
+</html>
+
+ {% endcomment %}
+
+
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Information</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        .total-summary {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .continue-shopping-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .continue-shopping-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Billing Information</h1>
+
+    {% comment %} <p>Order Number: {{ order.pk }}</p> {% endcomment %}
+    <p>User: {{ order.user.username }}</p>
+
+    <table class="table">
+
+        <tbody>
+        {% for item in order.items.all %}
+            <tr>
+                <td>
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" height="100" width="100">
+                    {{ item.product.name }}
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.subtotal }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p>Total Quantity: {{ order.total_quantity }}</p>
+    <p>Total Price: ${{ order.total_price }}</p>
+
+    <p>Billing Address: {{ order.billing_address }}</p>
+    <!-- Add other billing information here -->
+
+    <div class="total-summary">
+        <p>Total Quantity: {{ order.total_quantity }}</p>
+        <p>Total Price: ${{ order.total_price }}</p>
+    </div>
+
+    <!-- You can add a link to view orders or go back to the home page -->
+    <a href="{% url 'home' %}" class="btn btn-primary continue-shopping-btn">Continue Shopping</a>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

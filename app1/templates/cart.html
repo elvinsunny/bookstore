@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} - Online Bookstore{% endblock %}
+
+{% block content %}
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-from-cart,
+        .quantity-actions {
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .total-summary {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .checkout-btn,
+        .continue-shopping-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .checkout-btn {
+            background-color: #28a745;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .continue-shopping-btn {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+
+<body>
+
+    <div class="container">
+        <h1 class="text-center">Your Cart</h1>
+    
+        {% if cart_items %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th class="text-center">Remove</th>
+                    <th class="text-center">Increase/Decrease</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in cart_items %}
+                    <tr>
+                        <td><img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" height="100" width="100"></td>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.subtotal }}</td>
+
+                        <td class="text-center">
+                            <div class="cart-item-actions d-flex justify-content-center">
+                                <a href="{% url 'remove_from_cart' product_id=item.product.id %}" class="remove-from-cart text-danger">&#10007;</a>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="cart-item-actions">
+                                <a href="{% url 'increase_quantity' cart_item_id=item.id %}" class="quantity-actions">&#43;</a>
+                                {{ item.quantity }}
+                                <a href="{% url 'decrease_quantity' cart_item_id=item.id %}" class="quantity-actions">&#8722;</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    
+            <div class="total-summary text-right">
+                <p>Total Quantity: {{ total_quantity }}</p>
+                <p>Total Price: ${{ total_cart_price }}</p>
+            </div>
+    
+            <div class="text-center">
+                <a href="{% url 'checkout' %}" class="btn btn-success checkout-btn">Checkout</a>
+                <a href="{% url 'home' %}" class="btn btn-primary continue-shopping-btn">Continue Shopping</a>
+            </div>
+    
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+    </html>
+  
+    {% endblock %}

@@ -1,0 +1,96 @@
+
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} - Online Bookstore{% endblock %}
+
+{% block content %}
+  <style>
+    body {
+      background-color: #333; /* Change background color to dark gray */
+    }
+
+    .container {
+      margin-top: 20px;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .product-details {
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .out-of-stock {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+    /* Style for the form container */
+    .add-to-cart-form {
+      margin-top: 20px;
+    }
+
+    /* Style for the submit button */
+    .add-to-cart-button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    /* Optional: Style for the link if needed */
+    .add-to-cart-link {
+      text-decoration: none;
+      color: #28a745;
+    }
+  </style>
+
+<body style="background-color: #333;">
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+    </div>
+    <div class="col-md-6">
+      <div class="product-details">
+        <h2>{{ product.name }}</h2>
+        <p>{{ product.description }}</p>
+        <p>ISBN: {{ product.isbn }}</p>
+        <p>Binding: {{ product.binding }}</p>
+        <p>Language: {{ product.language }}</p>
+        <p>Publishing Date: {{ product.publishing_date }}</p>
+        <p>Edition: {{ product.edition }}</p>
+        <p>Stock: {{ product.quantity }}</p>
+        <p><strong>Price: ₹{{ product.price }}</strong></p>
+
+        {% if product.quantity > 0 %}
+          <div class="add-to-cart-form">
+            <form method="post" action="{% url 'add_to_cart' product.id %}">
+              {% csrf_token %}
+              <button type="submit" class="add-to-cart-button">Add to Cart</button>
+            </form>
+          </div>
+        {% else %}
+          <p class="out-of-stock">Out of Stock</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
+
+{% endblock %}

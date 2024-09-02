@@ -1,0 +1,77 @@
+
+
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} - Online Bookstore{% endblock %}
+
+{% block content %}
+
+
+<!-- search_results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Search Results</title>
+    <!-- Add Bootstrap CDN links -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        /* Add any custom styles here */
+        body {
+            background-color: #f8f9fa;
+            padding-top: 70px; /* Adjust based on your navigation bar height */
+        }
+        .container {
+            margin-top: 20px;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        p {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Search Results for {{ query }}</h2>
+
+    {% if results %}
+        <div class="row">
+            {% for item in results %}
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{% url 'product_detail' item.id %}">{{ item.name }}</a></h5>
+                            <!-- Add other details if needed -->
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+<!-- users_with_orders.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Users with Orders</h2>
+
+  {% if users_with_orders %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Total Orders</th>
+          <th>Total Amount</th>
+          <th>Billing Address</th>
+          <th>Date of Last Order</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users_with_orders %}
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+
+            <!-- Fetch the latest order details for the user -->
+            {% with latest_order=user.order_set.last %}
+              <td>{{ latest_order.total_quantity }}</td>
+              <td>${{ latest_order.total_price }}</td>
+              <td>{{ latest_order.billing_address }}</td>
+              <td>{{ latest_order.created_at }}</td>
+            {% endwith %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No users have placed orders.</p>
+  {% endif %}
+{% endblock %}
